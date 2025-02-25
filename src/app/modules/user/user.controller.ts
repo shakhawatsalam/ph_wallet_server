@@ -108,8 +108,38 @@ const logout = async (
   }
 };
 
+const approveAgent = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (user.role !== "Agent") {
+      return res.status(400).json({ message: "Only agents can be approved" });
+    }
+
+    user.isApproved = true;
+    await user.save();
+
+    res.status(200).json({
+      message: "Agent approved successfully",
+      user,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const UserController = {
   registerUser,
   login,
   logout,
+  approveAgent,
 };
