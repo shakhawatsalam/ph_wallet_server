@@ -1,5 +1,6 @@
-import cors from 'cors';
-import express, { Application, Request, Response } from 'express';
+import cors from "cors";
+import express, { Application, Request, Response } from "express";
+import router from "./app/routes";
 
 const app: Application = express();
 
@@ -7,10 +8,10 @@ const app: Application = express();
 app.use(express.json());
 app.use(cors());
 
-app.get('/', (req: Request, res: Response) => {
-  const a = 10;
+app.use("/api/v1/", router);
 
-  res.send(a);
+app.get("/", (req: Request, res: Response) => {
+  res.send("helll woeldj");
 });
 
 export default app;
